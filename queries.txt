@@ -10,6 +10,7 @@ Tables:
 2.Artist Table
 3.Review Table
 4.Media Table
+5.Genre Table
 
 
 Relationship:
@@ -17,6 +18,7 @@ Relationship:
 1.Movie-Artist Table
 2.movie-Review Table
 3.Movie-Media Table
+4.movie-Genre Table
 
 
 Query:
@@ -53,11 +55,11 @@ mysql> show tables;
 +--------------------+
 1 row in set (0.01 sec)
 
-mysql> desc movie;
+mysql>desc movie;
 +-------------+-------------+------+-----+---------+-------+
 | Field       | Type        | Null | Key | Default | Extra |
 +-------------+-------------+------+-----+---------+-------+
-| id          | int         | NO   |     | NULL    |       |
+| id          | int         | NO   | PRI | NULL    |       |
 | moviename   | varchar(20) | NO   |     | NULL    |       |
 | ReleaseDate | date        | NO   |     | NULL    |       |
 +-------------+-------------+------+-----+---------+-------+
@@ -122,7 +124,146 @@ mysql> desc media;
 +-----------+-------------+------+-----+---------+-------+
 3 rows in set (0.01 sec)
 
-mysql>
+mysql>create table genre(id int not null,genre varchar(30) not null,primary key (id));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc genre
+    -> ;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| genre | varchar(30) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_imdbtask |
++--------------------+
+| artist             |
+| genre              |
+| media              |
+| movie              |
+| review             |
++--------------------+
+5 rows in set (0.00 sec)
+mysql> desc review;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| id             | int         | NO   | PRI | NULL    |       |
+| customerid     | int         | NO   | MUL | NULL    |       |
+| customerreview | varchar(30) | NO   |     | NULL    |       |
+| reviewpoints   | int         | NO   |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table movie_artist(movieid int,artistid int,primary key(movieid,artistid));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc movie-artist;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-artist' at line 1
+mysql> desc movie_artist;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| movieid  | int  | NO   | PRI | NULL    |       |
+| artistid | int  | NO   | PRI | NULL    |       |
++----------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+mysql> create table movie_review(movieid int,reviewid int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc movie_review;
++----------+------+------+-----+---------+-------+
+| Field    | Type | Null | Key | Default | Extra |
++----------+------+------+-----+---------+-------+
+| movieid  | int  | YES  |     | NULL    |       |
+| reviewid | int  | YES  |     | NULL    |       |
++----------+------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql>  create table movie_genre(movieid int,genreid int,primary key(movieid,genreid));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc movie_genre;
++---------+------+------+-----+---------+-------+
+| Field   | Type | Null | Key | Default | Extra |
++---------+------+------+-----+---------+-------+
+| movieid | int  | NO   | PRI | NULL    |       |
+| genreid | int  | NO   | PRI | NULL    |       |
++---------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+mysql> select *from movie;
++----+-----------+-------------+
+| id | moviename | ReleaseDate |
++----+-----------+-------------+
+|  1 | ponni     | 2022-01-01  |
+|  2 | selvan    | 2022-01-04  |
+|  3 | valli     | 2023-01-09  |
++----+-----------+-------------+
+3 rows in set (0.00 sec)
+mysql> insert artist(id,artistname,movies) values(1,'vijay',69),(2,'ajith',60),(3,'surya',50);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+ mysql> select * from artist;
++----+------------+--------+
+| id | artistname | movies |
++----+------------+--------+
+|  1 | vijay      |     69 |
+|  2 | ajith      |     60 |
+|  3 | surya      |     50 |
++----+------------+--------+
+3 rows in set (0.00 sec)
+mysql> select * from review;
++----+------------+----------------+--------------+
+| id | customerid | customerreview | reviewpoints |
++----+------------+----------------+--------------+
+|  1 |          1 | Good           |            5 |
+|  2 |          2 | nice           |            4 |
+|  3 |          3 | ok             |            2 |
++----+------------+----------------+--------------+
+3 rows in set (0.00 sec)
+mysql> select* from genre;
++----+----------+
+| id | genre    |
++----+----------+
+|  1 | horror   |
+|  2 | romantic |
+|  3 | triller  |
++----+----------+
+3 rows in set (0.00 sec)
+mysql> select *from movie_genre;
++---------+---------+
+| movieid | genreid |
++---------+---------+
+|       1 |       2 |
+|       1 |       3 |
+|       3 |       1 |
++---------+---------+
+3 rows in set (0.00 sec)
+mysql> select genre.id,genre.genre from genre inner join movie_genre on genre.id=movie_genre.movieid;
++----+---------+
+| id | genre   |
++----+---------+
+|  1 | horror  |
+|  1 | horror  |
+|  3 | triller |
++----+---------+
+3 rows in set (0.00 sec)
+mysql> select genre.id,genre.genre from genre inner join movie on movie.id=genre.id;
++----+----------+
+| id | genre    |
++----+----------+
+|  1 | horror   |
+|  2 | romantic |
+|  3 | triller  |
++----+----------+
+3 rows in set (0.00 sec)
+
+
 
 
 
