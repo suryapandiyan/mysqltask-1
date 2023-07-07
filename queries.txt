@@ -1,0 +1,181 @@
+TASK 1 MYSQL IMDB DATABASE
+1.movie should have multiple media(Video or Image)
+2.Movie can belong to multiple Genre.
+3.movie can have multiple review and Review can belong to a user.
+4.Artist can have multiple skills.
+5.Artist can perform multiple role in a single flim.
+
+Tables:
+1.Movie Table
+2.Artist Table
+3.Review Table
+4.Media Table
+
+
+Relationship:
+
+1.Movie-Artist Table
+2.movie-Review Table
+3.Movie-Media Table
+
+
+Query:
+C:\Users\91934>mysql -u root -p
+Enter password: **********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 8.0.33 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database imdbtask;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> use imdbtask
+Database changed
+mysql> show tables;
+Empty set (0.03 sec)
+
+mysql> create table movie(id int not null,moviename varchar(20) not null,ReleaseDate date not null);
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_imdbtask |
++--------------------+
+| movie              |
++--------------------+
+1 row in set (0.01 sec)
+
+mysql> desc movie;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| id          | int         | NO   |     | NULL    |       |
+| moviename   | varchar(20) | NO   |     | NULL    |       |
+| ReleaseDate | date        | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table artist(id int Not Null,artistname varchar(20) Not Null,movies int Not Null,primary key (id));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_imdbtask |
++--------------------+
+| artist             |
+| movie              |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql> desc artist;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| id         | int         | NO   | PRI | NULL    |       |
+| artistname | varchar(20) | NO   |     | NULL    |       |
+| movies     | int         | NO   |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql>  create table review(id int not null,customerid int not null,customerreview varchar(30) not null,reviewpoints int not null,primary key (id));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_imdbtask |
++--------------------+
+| artist             |
+| movie              |
+| review             |
++--------------------+
+3 rows in set (0.00 sec)
+
+mysql> desc review;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| id             | int         | NO   | PRI | NULL    |       |
+| customerid     | int         | NO   |     | NULL    |       |
+| customerreview | varchar(30) | NO   |     | NULL    |       |
+| reviewpoints   | int         | NO   |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> create table media(id int not null,mediatype varchar(10) not null,moviename varchar(20),primary key (id));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc media;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| id        | int         | NO   | PRI | NULL    |       |
+| mediatype | varchar(10) | NO   |     | NULL    |       |
+| moviename | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
